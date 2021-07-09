@@ -76,6 +76,7 @@ const search = () => {
     });
     customerDB = resultCustomer;
   }
+  console.log(customerDB);
 };
 
 document.getElementById("search_button").addEventListener("click", search);
