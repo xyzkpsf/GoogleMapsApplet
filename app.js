@@ -1,7 +1,8 @@
 let FAClient;
 let customerDB = [];
 let currCustomer;
-var map;
+let map;
+let geocoder;
 
 const SERVICE = {
   name: "FreeAgentService",
@@ -12,67 +13,15 @@ FAClient = new FAAppletClient({
   appletId: SERVICE.appletId,
 });
 
-FAClient.listEntityValues(
-  {
-    entity: "customers",
-  },
-  (data) => {
-    storeData(data);
-    console.log(customerDB);
-  }
-);
-
-// const interval = 750;
-//     console.log(customerDB);
-//     if (customerDB.length > 0) {
-//       customerDB.forEach((customer, index) => {
-//         setTimeout(() => {
-//           geocodeAddress(geocoder, map, customer);
-//         }, index * interval);
-//       });
-//     }
-
 FAClient.on("showLocation", (data) => {
   let { record } = data;
   currCustomer = parseData(record);
 });
 
-// FAClient.on("synccustomer", (data) => {
-//   currCustomer = parseData(data);
-//   if (!customerDB.includes(currCustomer)) {
-//     customerDB.push(currCustomer);
-//   }
-//   console.log("sysn: ", customerDB);
-// });
-
-// FAClient.on("updatecustomer", (data) => {
-//   let {
-//     record: {
-//       field_values: {
-//         seq_id: { id },
-//         customers_field4: { value: address },
-//       },
-//     },
-//   } = data;
-//   // search the customer by id then update the field
-//   customerDB.forEach((element) => {
-//     if (element.id == id) {
-//       element.address = address;
-//     }
-//   });
-//   console.log("Update: ", customerDB);
-// });
-
 const search = () => {
   console.log(customerDB);
   let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
-  if (keyName.length > 0) {
-    let resultCustomer = customerDB.filter((customer) => {
-      let { fName, lName } = customer;
-      return keyName.includes(fName) || keyName.includes(lName);
-    });
-  }
-  console.log(resultCustomer);
+  console.log(keyName);
 };
 
 document.getElementById("search_button").addEventListener("click", search);
@@ -98,29 +47,24 @@ const parseData = (data) => {
   return { id, fName, lName, company, phone, address };
 };
 
-const storeData = (data) => {
-  customerDB = data.map((record) => {
-    return parseData(record);
-  });
-};
+// const storeData = (data) => {
+//   customerDB = data.map((record) => {
+//     return parseData(record);
+//   });
+// };
 
 function initMap() {
-  //geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
-  const interval = 750;
-  console.log(customerDB);
-  customerDB.forEach((customer, index) => {
-    setTimeout(() => {
-      geocodeAddress(geocoder, map, customer);
-    }, index * interval);
-  });
+  geocoder = new google.maps.Geocoder();
 }
 
-function geocodeAddress(geocoder, resultsMap, customer) {
-  console.log(customer.fName, customer.lName);
+function geocodeAddress(geocoder, resultsMap, customer_id) {
+  //
+  let customer = customerDB.filter((element) => element.id == customer_id);
+  customer = customer[0];
   geocoder
     .geocode({ address: customer.address })
     .then(({ results }) => {
@@ -135,7 +79,7 @@ function geocodeAddress(geocoder, resultsMap, customer) {
       google.maps.event.addListener(marker, "mouseover", () => {
         document.getElementById(
           "info"
-        ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone}
+        ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone} 
         ${customer.address}`;
         let element = document.getElementsByClassName("customer_info");
         element[0].classList.add("show");
@@ -149,3 +93,35 @@ function geocodeAddress(geocoder, resultsMap, customer) {
       alert("Geocode was not successful for the following reason: " + e)
     );
 }
+
+const setupData = (data) => {
+  let tempArr = data.map((record) => {
+    return parseData(record);
+  });
+  console.log(tempArr);
+  tempArr.forEach((customer) => {
+    const interval = 750;
+    console.log(customerDB);
+    customerDB.forEach((customer, index) => {
+      setTimeout(() => {
+        geocodeAddress(geocoder, map, customer);
+      }, index * interval);
+    });
+    geocodeAddress(geocoder, map, customer.id);
+  });
+};
+
+const syncData = () => {
+  console.log("sync data");
+  FAClient.listEntityValues(
+    {
+      entity: "customers",
+    },
+    (data) => {
+      console.log(data);
+      setupData(data);
+    }
+  );
+};
+
+document.getElementById("sync_button").addEventListener("click", syncData);
