@@ -33,6 +33,7 @@ function initMap() {
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
         });
+        console.log(KeyName, currentDB);
       } else {
         currentDB = customerDB.filter((customer) => {
           return (
@@ -42,10 +43,12 @@ function initMap() {
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
         });
+        console.log(KeyName, currentDB);
       }
     }
     clearMarker();
     drawMarker();
+    console.log("At the end");
   };
 
   document.getElementById("search_button").addEventListener("click", search);
