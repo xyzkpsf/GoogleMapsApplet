@@ -131,17 +131,21 @@ function initMap() {
     let counter = 0;
     currentDB.forEach((customer, index) => {
       setTimeout(() => {
+        if (
+          typeof customer.address === "undefined" ||
+          customer.address === null
+        ) {
+          counter = counter + 1;
+        }
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
     document.getElementById(
       "info1"
-    ).textContent = `Results with location info: ${markers.length}`;
+    ).textContent = `Results with location info: ${currentDB.length - counter}`;
     document.getElementById(
       "info2"
-    ).textContent = `Results without location info: ${
-      currentDB.length - markers.length
-    }`;
+    ).textContent = `Results without location info: ${counter}`;
     let element = document.getElementsByClassName("customer_info");
     element[0].classList.add("show");
   };
