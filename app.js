@@ -13,6 +13,7 @@ FAClient = new FAAppletClient({
   appletId: SERVICE.appletId,
 });
 
+
 FAClient.listEntityValues(
   {
     entity: "customers",
@@ -142,3 +143,5 @@ function geocodeAddress(geocoder, resultsMap, customer) {
       alert("Geocode was not successful for the following reason: " + e)
     );
 }
+
+initMap();
