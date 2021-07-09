@@ -130,13 +130,15 @@ function initMap() {
     const interval = 700;
     let counter = 0;
     currentDB.forEach((customer, index) => {
+      if (
+        typeof customer.address === "undefined" ||
+        customer.address === null
+      ) {
+        counter = counter + 1;
+      }
+    });
+    currentDB.forEach((customer, index) => {
       setTimeout(() => {
-        if (
-          typeof customer.address === "undefined" ||
-          customer.address === null
-        ) {
-          counter = counter + 1;
-        }
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
