@@ -38,6 +38,8 @@ FAClient.listEntityValues(
 
 FAClient.on("showLocation", (data) => {
   let { record } = data;
+  console.log(record);
+  console.log(data);
   currCustomer = parseData(record);
   console.log(currCustomer);
 });
