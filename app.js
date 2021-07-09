@@ -6,7 +6,7 @@ let customerDB = [];
 // Need to handle nondefine
 const SERVICE = {
   name: "FreeAgentService",
-  appletId: `aHR0cHM6Ly94eXprcHNmLmdpdGh1Yi5pby9Hb29nbGUtTWFwcy1BcHBsZXQ=`,
+  appletId: `aHR0cHM6Ly94eXprcHNmLmdpdGh1Yi5pby9Hb29nbGVNYXBzQXBwbGV0`,
 };
 
 FAClient = new FAAppletClient({
