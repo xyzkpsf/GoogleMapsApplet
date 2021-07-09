@@ -75,16 +75,13 @@ function initMap() {
           FAClient.navigateTo(`/customers/view/${customer.id}`);
         });
         google.maps.event.addListener(marker, "mouseover", () => {
-          document.getElementById("info").textContent =
-            customer.fName +
-            ", " +
-            customer.lName +
-            ", " +
-            customer.company +
-            ", " +
-            customer.phone +
-            "/n" +
-            customer.address;
+          document.getElementById(
+            "info1"
+          ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone};
+
+          document.getElementById(
+            "info2"
+          ).textContent = ${customer.address}`;
           let element = document.getElementsByClassName("customer_info");
           element[0].classList.add("show");
         });
@@ -106,13 +103,12 @@ function initMap() {
   };
 
   const syncData = () => {
-    console.log("sync data");
+    clearMarker();
     FAClient.listEntityValues(
       {
         entity: "customers",
       },
       (data) => {
-        console.log(data);
         setupData(data);
       }
     );
@@ -131,6 +127,7 @@ function initMap() {
     markers.forEach((ele, index) => {
       markers[index].setMap(null);
     });
+    markers = [];
   };
 
   document.getElementById("sync_button").addEventListener("click", syncData);

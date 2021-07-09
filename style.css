@@ -21,7 +21,7 @@
 }
 
 #search_bar {
-  width: 120px;
+  width: 130px;
   font: 20px;
   border-radius: 10px;
   border: black solid 1px;
@@ -38,7 +38,7 @@
 }
 
 #sync_button {
-  width: 100px;
+  width: 80px;
   height: 25px;
   font: 20px;
   border-radius: 10px;
@@ -55,16 +55,21 @@
 }
 
 .customer_info {
-  align-self: center;
   display: none;
 }
 
 .customer_info.show {
-  align-self: center;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+#info1,
+#info2 {
+  align-self: start;
 }
 
 #map {
-  width: 600px;
+  width: 800px;
   height: 600px;
 }
