@@ -59,10 +59,7 @@ function initMap() {
     return { id, fName, lName, company, phone, address };
   };
 
-  function geocodeAddress(geocoder, resultsMap, customer_id) {
-    //
-    let customer = customerDB.filter((element) => element.id == customer_id);
-    customer = customer[0];
+  function geocodeAddress(geocoder, resultsMap, customer) {
     geocoder
       .geocode({ address: customer.address })
       .then(({ results }) => {
@@ -116,7 +113,7 @@ function initMap() {
     const interval = 700;
     customerDB.forEach((customer, index) => {
       setTimeout(() => {
-        geocodeAddress(geocoder, map, customer.id);
+        geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
   };
