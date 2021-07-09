@@ -2,6 +2,7 @@ let FAClient;
 let customerDB = [];
 var geocoder;
 var map;
+let currCustomer;
 
 // add a function that once trigger, return the reference of a customer
 
@@ -37,7 +38,8 @@ FAClient.listEntityValues(
 
 FAClient.on("showLocation", (data) => {
   let { record } = data;
-  customerDB.push(parseData(record));
+  currCustomer = parseData(record);
+  console.log(customerDB);
 });
 
 // FAClient.on("synccustomer", (data) => {
@@ -74,9 +76,8 @@ const search = () => {
       let { fName, lName } = customer;
       return keyName.includes(fName) || keyName.includes(lName);
     });
-    customerDB = resultCustomer;
   }
-  console.log(customerDB);
+  console.log(resultCustomer);
 };
 
 document.getElementById("search_button").addEventListener("click", search);
@@ -108,23 +109,64 @@ const storeData = (data) => {
   });
 };
 
+// function initMap() {
+//   //geocoder = new google.maps.Geocoder();
+//   map = new google.maps.Map(document.getElementById("map"), {
+//     zoom: 12,
+//     center: { lat: 37.7749, lng: -122.4194 },
+//   });
+//   const interval = 750;
+//   console.log(customerDB);
+//   customerDB.forEach((customer, index) => {
+//     setTimeout(() => {
+//       geocodeAddress(geocoder, map, customer);
+//     }, index * interval);
+//   });
+// }
+
+// function geocodeAddress(geocoder, resultsMap, customer) {
+//   console.log(customer.fName, customer.lName);
+//   geocoder
+//     .geocode({ address: customer.address })
+//     .then(({ results }) => {
+//       resultsMap.setCenter(results[0].geometry.location);
+//       let marker = new google.maps.Marker({
+//         map: resultsMap,
+//         position: results[0].geometry.location,
+//       });
+//       google.maps.event.addListener(marker, "click", () => {
+//         FAClient.navigateTo(`/customers/view/${customer.id}`);
+//       });
+//       google.maps.event.addListener(marker, "mouseover", () => {
+//         document.getElementById(
+//           "info"
+//         ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone}
+//         ${customer.address}`;
+//         let element = document.getElementsByClassName("customer_info");
+//         element[0].classList.add("show");
+//       });
+//       google.maps.event.addListener(marker, "mouseout", () => {
+//         let element = document.getElementsByClassName("customer_info");
+//         element[0].classList.remove("show");
+//       });
+//     })
+//     .catch((e) =>
+//       alert("Geocode was not successful for the following reason: " + e)
+//     );
+// }
+
 function initMap() {
-  geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
-  const interval = 750;
-  console.log(customerDB);
-  customerDB.forEach((customer, index) => {
-    setTimeout(() => {
-      geocodeAddress(geocoder, map, customer);
-    }, index * interval);
-  });
+  geocoder = new google.maps.Geocoder();
+  if (currCustomer) {
+    geocodeAddress(geocoder, map, currCustomer);
+  }
 }
 
 function geocodeAddress(geocoder, resultsMap, customer) {
-  console.log(customer.fName, customer.lName);
   geocoder
     .geocode({ address: customer.address })
     .then(({ results }) => {
