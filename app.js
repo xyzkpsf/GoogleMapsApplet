@@ -33,6 +33,7 @@ function initMap() {
     });
     clearMarker();
     customerDB = resultArray;
+    drawMarker();
   };
 
   document.getElementById("search_button").addEventListener("click", search);
@@ -77,11 +78,8 @@ function initMap() {
         google.maps.event.addListener(marker, "mouseover", () => {
           document.getElementById(
             "info1"
-          ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone};
-
-          document.getElementById(
-            "info2"
-          ).textContent = ${customer.address}`;
+          ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone}`;
+          document.getElementById("info2").textContent = `${customer.address}`;
           let element = document.getElementsByClassName("customer_info");
           element[0].classList.add("show");
         });
@@ -115,7 +113,7 @@ function initMap() {
   };
 
   const drawMarker = () => {
-    const interval = 500;
+    const interval = 700;
     customerDB.forEach((customer, index) => {
       setTimeout(() => {
         geocodeAddress(geocoder, map, customer.id);
