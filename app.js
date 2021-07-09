@@ -1,5 +1,7 @@
 let FAClient;
 let customerDB = [];
+var geocoder;
+var map;
 
 // add a function that once trigger, return the reference of a customer
 
@@ -13,7 +15,6 @@ FAClient = new FAAppletClient({
   appletId: SERVICE.appletId,
 });
 
-
 FAClient.listEntityValues(
   {
     entity: "customers",
@@ -22,6 +23,15 @@ FAClient.listEntityValues(
     console.log(data);
     storeData(data);
     console.log(customerDB);
+    const interval = 750;
+    console.log(customerDB);
+    if (customerDB.length > 0) {
+      customerDB.forEach((customer, index) => {
+        setTimeout(() => {
+          geocodeAddress(geocoder, map, customer);
+        }, index * interval);
+      });
+    }
   }
 );
 
@@ -97,20 +107,11 @@ const storeData = (data) => {
 };
 
 function initMap() {
+  geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
-  const geocoder = new google.maps.Geocoder();
-  const interval = 750;
-  console.log(customerDB);
-  if (customerDB.length > 0) {
-    customerDB.forEach((customer, index) => {
-      setTimeout(() => {
-        geocodeAddress(geocoder, map, customer);
-      }, index * interval);
-    });
-  }
 }
 
 function geocodeAddress(geocoder, resultsMap, customer) {
@@ -143,5 +144,3 @@ function geocodeAddress(geocoder, resultsMap, customer) {
       alert("Geocode was not successful for the following reason: " + e)
     );
 }
-
-initMap();
