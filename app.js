@@ -23,6 +23,7 @@ function initMap() {
 
   const search = () => {
     let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
+    console.log(currentDB, keyName);
     if (keyName.length == 0) {
       currentDB = [];
     } else {
