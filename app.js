@@ -39,7 +39,7 @@ FAClient.listEntityValues(
 FAClient.on("showLocation", (data) => {
   let { record } = data;
   currCustomer = parseData(record);
-  console.log(customerDB);
+  console.log(currCustomer);
 });
 
 // FAClient.on("synccustomer", (data) => {
@@ -162,6 +162,7 @@ function initMap() {
   });
   geocoder = new google.maps.Geocoder();
   if (currCustomer) {
+    console.log(currCustomer);
     geocodeAddress(geocoder, map, currCustomer);
   }
 }
