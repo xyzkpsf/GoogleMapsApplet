@@ -37,18 +37,21 @@
   border: black solid 1px;
 }
 
-#search_button:hover {
-  cursor: pointer;
-}
-
 #sync_button {
-  width: 70px;
+  width: 100px;
   height: 25px;
   font: 20px;
   border-radius: 10px;
   border: black solid 1px;
   background-color: white;
   align-self: center;
+}
+
+#search_button:hover,
+#sync_button:hover {
+  cursor: pointer;
+  color: white;
+  background-color: black;
 }
 
 .customer_info {

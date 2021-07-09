@@ -3,6 +3,7 @@ let customerDB = [];
 let currCustomer;
 let map;
 let geocoder;
+let markers = [];
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -20,15 +21,17 @@ function initMap() {
     appletId: SERVICE.appletId,
   });
 
-  FAClient.on("showLocation", (data) => {
-    let { record } = data;
-    currCustomer = parseData(record);
-  });
-
   const search = () => {
-    console.log(customerDB);
     let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
-    console.log(keyName);
+    const resultArray = customerDB.filter((customer) => {
+      return (
+        customer.fName == keyName[0] ||
+        customer.lName == keyName[1] ||
+        customer.fName == keyName[1] ||
+        customer.lName == keyName[0]
+      );
+    });
+    customerDB = resultArray;
   };
 
   document.getElementById("search_button").addEventListener("click", search);
@@ -66,6 +69,7 @@ function initMap() {
           map: resultsMap,
           position: results[0].geometry.location,
         });
+        markers.push(marker);
         google.maps.event.addListener(marker, "click", () => {
           FAClient.navigateTo(`/customers/view/${customer.id}`);
         });
@@ -91,14 +95,7 @@ function initMap() {
     customerDB = data.map((record) => {
       return parseData(record);
     });
-    console.log(customerDB);
-    const interval = 750;
-    console.log(customerDB);
-    customerDB.forEach((customer, index) => {
-      setTimeout(() => {
-        geocodeAddress(geocoder, map, customer.id);
-      }, index * interval);
-    });
+    drawMarker();
   };
 
   const syncData = () => {
@@ -112,6 +109,21 @@ function initMap() {
         setupData(data);
       }
     );
+  };
+
+  const drawMarker = () => {
+    const interval = 500;
+    customerDB.forEach((customer, index) => {
+      setTimeout(() => {
+        geocodeAddress(geocoder, map, customer.id);
+      }, index * interval);
+    });
+  };
+
+  const clearMarker = () => {
+    markers.forEach((ele, index) => {
+      markers[index].setMap(null);
+    });
   };
 
   document.getElementById("sync_button").addEventListener("click", syncData);
