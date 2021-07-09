@@ -131,7 +131,10 @@ function initMap() {
     let counter = 0;
     currentDB.forEach((customer, index) => {
       setTimeout(() => {
-        if (customer.address != null) {
+        if (
+          typeof customer.address === "undefined" ||
+          customer.address == null
+        ) {
           counter++;
         }
         geocodeAddress(geocoder, map, customer);
@@ -140,7 +143,6 @@ function initMap() {
     document.getElementById(
       "info1"
     ).textContent = `Results with location info: ${currentDB.length - counter}`;
-
     document.getElementById(
       "info2"
     ).textContent = `Results without location info: ${counter}`;
