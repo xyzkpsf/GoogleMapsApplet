@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Google Maps Applet</title>
+  </head>
+  <body>
+    <div class="topbox">
+      <div class="searchBox">
+        <input
+          type="text"
+          ,
+          id="search_bar"
+          ,
+          placeholder="Input Customer Name"
+        />
+        <button id="search_button">Search</button>
+      </div>
+      <div class="customer_info">
+        <p id="info">name, phone, company, address</p>
+      </div>
+    </div>
+    <div id="map"></div>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxfL1Gt4XXyj4jq7TXbggR8o87sEE3KWU&callback=initMap"
+      type="text/javascript"
+    ></script>
+    <script src="./lib.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
