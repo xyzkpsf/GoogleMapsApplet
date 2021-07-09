@@ -113,8 +113,10 @@ function initMap() {
     },
     (data) => {
       storeData(data);
+      console.log(customerDB);
     }
   );
+  console.log(customerDB);
   geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
