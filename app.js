@@ -41,9 +41,9 @@ function initMap() {
           );
         }
       });
-      clearMarker();
-      drawMarker();
     }
+    clearMarker();
+    drawMarker();
   };
 
   document.getElementById("search_button").addEventListener("click", search);
