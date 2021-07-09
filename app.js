@@ -1,5 +1,6 @@
 let FAClient;
 let customerDB = [];
+let markers = [];
 var geocoder;
 var map;
 
