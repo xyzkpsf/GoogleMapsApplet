@@ -1,6 +1,5 @@
 let FAClient;
 let customerDB = [];
-let markers = [];
 var geocoder;
 var map;
 
@@ -16,25 +15,25 @@ FAClient = new FAAppletClient({
   appletId: SERVICE.appletId,
 });
 
-FAClient.listEntityValues(
-  {
-    entity: "customers",
-  },
-  (data) => {
-    console.log(data);
-    storeData(data);
-    console.log(customerDB);
-    const interval = 750;
-    console.log(customerDB);
-    if (customerDB.length > 0) {
-      customerDB.forEach((customer, index) => {
-        setTimeout(() => {
-          geocodeAddress(geocoder, map, customer);
-        }, index * interval);
-      });
-    }
-  }
-);
+// FAClient.listEntityValues(
+//   {
+//     entity: "customers",
+//   },
+//   (data) => {
+//     console.log(data);
+//     storeData(data);
+//     console.log(customerDB);
+//     const interval = 750;
+//     console.log(customerDB);
+//     if (customerDB.length > 0) {
+//       customerDB.forEach((customer, index) => {
+//         setTimeout(() => {
+//           geocodeAddress(geocoder, map, customer);
+//         }, index * interval);
+//       });
+//     }
+//   }
+// );
 
 FAClient.on("showLocation", (data) => {
   let { record } = data;
@@ -108,11 +107,28 @@ const storeData = (data) => {
 };
 
 function initMap() {
+  FAClient.listEntityValues(
+    {
+      entity: "customers",
+    },
+    (data) => {
+      storeData(data);
+      console.log(customerDB);
+    }
+  );
   geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
+  const interval = 750;
+  if (customerDB.length > 0) {
+    customerDB.forEach((customer, index) => {
+      setTimeout(() => {
+        geocodeAddress(geocoder, map, customer);
+      }, index * interval);
+    });
+  }
 }
 
 function geocodeAddress(geocoder, resultsMap, customer) {
@@ -124,7 +140,6 @@ function geocodeAddress(geocoder, resultsMap, customer) {
         map: resultsMap,
         position: results[0].geometry.location,
       });
-      markers.push(marker);
       google.maps.event.addListener(marker, "click", () => {
         FAClient.navigateTo(`/customers/view/${customer.id}`);
       });
