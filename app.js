@@ -23,25 +23,26 @@ function initMap() {
 
   const search = () => {
     let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
-    console.log(currentDB, keyName);
     if (keyName.length == 0) {
       currentDB = [];
     } else {
-      currentDB = customerDB.filter((customer) => {
-        if (KeyName.length == 1) {
+      if (KeyName.length == 1) {
+        currentDB = customerDB.filter((customer) => {
           return (
             customer.fName.toLowerCase() == keyName[0].toLowerCase() ||
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
-        } else {
+        });
+      } else {
+        currentDB = customerDB.filter((customer) => {
           return (
             customer.fName.toLowerCase() == keyName[0].toLowerCase() ||
             customer.lName.toLowerCase() == keyName[1].toLowerCase() ||
             customer.fName.toLowerCase() == keyName[1].toLowerCase() ||
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
-        }
-      });
+        });
+      }
     }
     clearMarker();
     drawMarker();
@@ -71,34 +72,38 @@ function initMap() {
   };
 
   function geocodeAddress(geocoder, resultsMap, customer) {
-    geocoder
-      .geocode({ address: customer.address })
-      .then(({ results }) => {
-        resultsMap.setCenter(results[0].geometry.location);
-        let marker = new google.maps.Marker({
-          map: resultsMap,
-          position: results[0].geometry.location,
-        });
-        markers.push(marker);
-        google.maps.event.addListener(marker, "click", () => {
-          FAClient.navigateTo(`/customers/view/${customer.id}`);
-        });
-        google.maps.event.addListener(marker, "mouseover", () => {
-          document.getElementById(
-            "info1"
-          ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone}`;
-          document.getElementById("info2").textContent = `${customer.address}`;
-          let element = document.getElementsByClassName("customer_info");
-          element[0].classList.add("show");
-        });
-        google.maps.event.addListener(marker, "mouseout", () => {
-          let element = document.getElementsByClassName("customer_info");
-          element[0].classList.remove("show");
-        });
-      })
-      .catch((e) =>
-        alert("Geocode was not successful for the following reason: " + e)
-      );
+    if (customer.address) {
+      geocoder
+        .geocode({ address: customer.address })
+        .then(({ results }) => {
+          resultsMap.setCenter(results[0].geometry.location);
+          let marker = new google.maps.Marker({
+            map: resultsMap,
+            position: results[0].geometry.location,
+          });
+          markers.push(marker);
+          google.maps.event.addListener(marker, "click", () => {
+            FAClient.navigateTo(`/customers/view/${customer.id}`);
+          });
+          google.maps.event.addListener(marker, "mouseover", () => {
+            document.getElementById(
+              "info1"
+            ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone}`;
+            document.getElementById(
+              "info2"
+            ).textContent = `${customer.address}`;
+            let element = document.getElementsByClassName("customer_info");
+            element[0].classList.add("show");
+          });
+          google.maps.event.addListener(marker, "mouseout", () => {
+            let element = document.getElementsByClassName("customer_info");
+            element[0].classList.remove("show");
+          });
+        })
+        .catch((e) =>
+          alert("Geocode was not successful for the following reason: " + e)
+        );
+    }
   }
 
   const setupData = (data) => {
@@ -128,8 +133,9 @@ function initMap() {
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
-    document.getElementById("info1").textContent = `Results Customers:`;
-    document.getElementById("info2").textContent = currentDB.length;
+    document.getElementById(
+      "info1"
+    ).textContent = `Results: ${currentDB.length}`;
     let element = document.getElementsByClassName("customer_info");
     element[0].classList.add("show");
   };
