@@ -44,7 +44,6 @@ function initMap() {
         });
       }
     }
-    console.log(currentDB);
     clearMarker();
     drawMarker();
   };
@@ -132,7 +131,7 @@ function initMap() {
     let counter = 0;
     currentDB.forEach((customer, index) => {
       setTimeout(() => {
-        if (customer.address) {
+        if (customer.address != null) {
           counter++;
         }
         geocodeAddress(geocoder, map, customer);
