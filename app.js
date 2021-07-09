@@ -1,6 +1,7 @@
 let FAClient;
 let customerDB = [];
 let currCustomer;
+var map;
 
 // add a function that once trigger, return the reference of a customer
 
@@ -36,10 +37,7 @@ FAClient.listEntityValues(
 
 FAClient.on("showLocation", (data) => {
   let { record } = data;
-  console.log(record);
-  console.log(data);
   currCustomer = parseData(record);
-  console.log(currCustomer);
 });
 
 // FAClient.on("synccustomer", (data) => {
@@ -156,7 +154,7 @@ const storeData = (data) => {
 // }
 
 function initMap() {
-  const map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
@@ -195,3 +193,12 @@ function geocodeAddress(geocoder, resultsMap, customer) {
       alert("Geocode was not successful for the following reason: " + e)
     );
 }
+
+function addMarker(location) {
+  const marker = new google.maps.Marker({
+    position: location,
+    map: map,
+  });
+}
+
+addMarker({ lat: 37.7749, lng: -122.4194 });
