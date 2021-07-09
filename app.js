@@ -31,6 +31,7 @@ function initMap() {
         customer.lName == keyName[0]
       );
     });
+    clearMarker();
     customerDB = resultArray;
   };
 
@@ -74,10 +75,16 @@ function initMap() {
           FAClient.navigateTo(`/customers/view/${customer.id}`);
         });
         google.maps.event.addListener(marker, "mouseover", () => {
-          document.getElementById(
-            "info"
-          ).textContent = `${customer.fName} ${customer.lName}, ${customer.company}, ${customer.phone} 
-        ${customer.address}`;
+          document.getElementById("info").textContent =
+            customer.fName +
+            ", " +
+            customer.lName +
+            ", " +
+            customer.company +
+            ", " +
+            customer.phone +
+            "/n" +
+            customer.address;
           let element = document.getElementsByClassName("customer_info");
           element[0].classList.add("show");
         });
