@@ -1,6 +1,6 @@
 let FAClient;
 let customerDB = [];
-let currCustomer;
+let currentDB = [];
 let map;
 let geocoder;
 let markers = [];
@@ -23,17 +23,20 @@ function initMap() {
 
   const search = () => {
     let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
-    const resultArray = customerDB.filter((customer) => {
+    const currentDB = customerDB.filter((customer) => {
       return (
-        customer.fName == keyName[0] ||
-        customer.lName == keyName[1] ||
-        customer.fName == keyName[1] ||
-        customer.lName == keyName[0]
+        customer.fName.toLowerCase() == keyName[0].toLowerCase() ||
+        customer.lName.toLowerCase() == keyName[1].toLowerCase() ||
+        customer.fName.toLowerCase() == keyName[1].toLowerCase() ||
+        customer.lName.toLowerCase() == keyName[0].toLowerCase()
       );
     });
     clearMarker();
-    customerDB = resultArray;
     drawMarker();
+    document.getElementById("info1").textContent = `Search Results:`;
+    document.getElementById("info2").textContent = currentDB.length;
+    let element = document.getElementsByClassName("customer_info");
+    element[0].classList.add("show");
   };
 
   document.getElementById("search_button").addEventListener("click", search);
@@ -94,6 +97,7 @@ function initMap() {
     customerDB = data.map((record) => {
       return parseData(record);
     });
+    currentDB = JSON.parse(JSON.stringify(customerDB));
     drawMarker();
   };
 
@@ -111,7 +115,7 @@ function initMap() {
 
   const drawMarker = () => {
     const interval = 700;
-    customerDB.forEach((customer, index) => {
+    currentDB.forEach((customer, index) => {
       setTimeout(() => {
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
