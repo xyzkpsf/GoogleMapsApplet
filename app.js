@@ -26,14 +26,13 @@ function initMap() {
     if (keyName.length == 0) {
       currentDB = [];
     } else {
-      if (KeyName.length == 1) {
+      if (keyName.length == 1) {
         currentDB = customerDB.filter((customer) => {
           return (
             customer.fName.toLowerCase() == keyName[0].toLowerCase() ||
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
         });
-        console.log(KeyName, currentDB);
       } else {
         currentDB = customerDB.filter((customer) => {
           return (
@@ -43,12 +42,10 @@ function initMap() {
             customer.lName.toLowerCase() == keyName[0].toLowerCase()
           );
         });
-        console.log(KeyName, currentDB);
       }
     }
     clearMarker();
     drawMarker();
-    console.log("At the end");
   };
 
   document.getElementById("search_button").addEventListener("click", search);
