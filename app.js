@@ -59,6 +59,13 @@ function initMap() {
     center: { lat: 37.7749, lng: -122.4194 },
   });
   geocoder = new google.maps.Geocoder();
+  const interval = 750;
+  console.log(customerDB);
+  customerDB.forEach((customer, index) => {
+    setTimeout(() => {
+      geocodeAddress(geocoder, map, customer.id);
+    }, index * interval);
+  });
 }
 
 function geocodeAddress(geocoder, resultsMap, customer_id) {
@@ -95,20 +102,10 @@ function geocodeAddress(geocoder, resultsMap, customer_id) {
 }
 
 const setupData = (data) => {
-  let tempArr = data.map((record) => {
+  customerDB = data.map((record) => {
     return parseData(record);
   });
-  console.log(tempArr);
-  tempArr.forEach((customer) => {
-    const interval = 750;
-    console.log(customerDB);
-    customerDB.forEach((customer, index) => {
-      setTimeout(() => {
-        geocodeAddress(geocoder, map, customer);
-      }, index * interval);
-    });
-    geocodeAddress(geocoder, map, customer.id);
-  });
+  console.log(customerDB);
 };
 
 const syncData = () => {
