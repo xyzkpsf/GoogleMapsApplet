@@ -128,14 +128,22 @@ function initMap() {
 
   const drawMarker = () => {
     const interval = 700;
+    let counter = 0;
     currentDB.forEach((customer, index) => {
       setTimeout(() => {
+        if (customer.address) {
+          counter++;
+        }
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
     document.getElementById(
       "info1"
-    ).textContent = `Results: ${currentDB.length}`;
+    ).textContent = `Results with location info: ${currentDB.length - counter}`;
+
+    document.getElementById(
+      "info2"
+    ).textContent = `Results without location info: ${counter}`;
     let element = document.getElementsByClassName("customer_info");
     element[0].classList.add("show");
   };
