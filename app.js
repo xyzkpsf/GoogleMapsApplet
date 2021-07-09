@@ -113,7 +113,6 @@ function initMap() {
     },
     (data) => {
       storeData(data);
-      console.log(customerDB);
     }
   );
   geocoder = new google.maps.Geocoder();
@@ -122,16 +121,16 @@ function initMap() {
     center: { lat: 37.7749, lng: -122.4194 },
   });
   const interval = 750;
-  if (customerDB.length > 0) {
-    customerDB.forEach((customer, index) => {
-      setTimeout(() => {
-        geocodeAddress(geocoder, map, customer);
-      }, index * interval);
-    });
-  }
+  console.log(customerDB);
+  customerDB.forEach((customer, index) => {
+    setTimeout(() => {
+      geocodeAddress(geocoder, map, customer);
+    }, index * interval);
+  });
 }
 
 function geocodeAddress(geocoder, resultsMap, customer) {
+  console.log(customer.fName, customer.lName);
   geocoder
     .geocode({ address: customer.address })
     .then(({ results }) => {
