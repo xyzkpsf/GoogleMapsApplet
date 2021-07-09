@@ -1,8 +1,8 @@
 let FAClient;
 let customerDB = [];
-var geocoder;
-var map;
-let currCustomer;
+// var geocoder;
+// var map;
+let currCustomer = None;
 
 // add a function that once trigger, return the reference of a customer
 
@@ -158,11 +158,11 @@ const storeData = (data) => {
 // }
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
     center: { lat: 37.7749, lng: -122.4194 },
   });
-  geocoder = new google.maps.Geocoder();
+  const geocoder = new google.maps.Geocoder();
   if (currCustomer) {
     console.log(currCustomer);
     geocodeAddress(geocoder, map, currCustomer);
