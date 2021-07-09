@@ -132,6 +132,7 @@ function initMap() {
     currentDB.forEach((customer, index) => {
       setTimeout(() => {
         if (customer.address) {
+          console.log(customer.address);
           counter++;
         }
         geocodeAddress(geocoder, map, customer);
