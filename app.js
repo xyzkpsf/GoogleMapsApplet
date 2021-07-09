@@ -15,15 +15,17 @@ FAClient = new FAAppletClient({
   appletId: SERVICE.appletId,
 });
 
-// FAClient.listEntityValues(
-//   {
-//     entity: "customers",
-//   },
-//   (data) => {
-//     console.log(data);
-//     storeData(data);
-//     console.log(customerDB);
-//     const interval = 750;
+FAClient.listEntityValues(
+  {
+    entity: "customers",
+  },
+  (data) => {
+    storeData(data);
+    console.log(customerDB);
+  }
+);
+
+// const interval = 750;
 //     console.log(customerDB);
 //     if (customerDB.length > 0) {
 //       customerDB.forEach((customer, index) => {
@@ -32,8 +34,6 @@ FAClient = new FAAppletClient({
 //         }, index * interval);
 //       });
 //     }
-//   }
-// );
 
 FAClient.on("showLocation", (data) => {
   let { record } = data;
@@ -67,6 +67,7 @@ FAClient.on("showLocation", (data) => {
 // });
 
 const search = () => {
+  console.log(customerDB);
   let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
   if (keyName.length > 0) {
     let resultCustomer = customerDB.filter((customer) => {
@@ -107,16 +108,6 @@ const storeData = (data) => {
 };
 
 function initMap() {
-  FAClient.listEntityValues(
-    {
-      entity: "customers",
-    },
-    (data) => {
-      storeData(data);
-      console.log(customerDB);
-    }
-  );
-  console.log(customerDB);
   geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
