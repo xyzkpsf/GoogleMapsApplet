@@ -23,13 +23,19 @@ function initMap() {
 
   const search = () => {
     let keyName = document.getElementById("search_bar").value.split(/[ ,]+/);
+    if (keyName.length == 0) {
+      currentDB = [];
+    } else {
     const currentDB = customerDB.filter((customer) => {
+      if (KeyName.length == 1) {
+        return customer.fName.toLowerCase() == keyName[0].toLowerCase() || customer.lName.toLowerCase() == keyName[0].toLowerCase()
+      } else {
       return (
         customer.fName.toLowerCase() == keyName[0].toLowerCase() ||
         customer.lName.toLowerCase() == keyName[1].toLowerCase() ||
         customer.fName.toLowerCase() == keyName[1].toLowerCase() ||
         customer.lName.toLowerCase() == keyName[0].toLowerCase()
-      );
+      );}
     });
     clearMarker();
     drawMarker();
