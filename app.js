@@ -39,10 +39,6 @@ function initMap() {
     });
     clearMarker();
     drawMarker();
-    document.getElementById("info1").textContent = `Search Results:`;
-    document.getElementById("info2").textContent = currentDB.length;
-    let element = document.getElementsByClassName("customer_info");
-    element[0].classList.add("show");
   };
 
   document.getElementById("search_button").addEventListener("click", search);
@@ -126,6 +122,10 @@ function initMap() {
         geocodeAddress(geocoder, map, customer);
       }, index * interval);
     });
+    document.getElementById("info1").textContent = `Results Customers:`;
+    document.getElementById("info2").textContent = currentDB.length;
+    let element = document.getElementsByClassName("customer_info");
+    element[0].classList.add("show");
   };
 
   const clearMarker = () => {
